@@ -41,6 +41,13 @@ public class UseCasesTests {
                         (a) -> {
                             var definition = new String(a.getArgument(0).toString().getBytes(StandardCharsets.UTF_8));
                             var parts = definition.split(",");
+
+                            try {
+                                Long.parseLong(parts[1]);
+                            } catch (Exception e) {
+                                return Optional.empty();
+                            }
+
                             return Optional.of(TradeDefinition.builder()
                                     .date(parts[0])
                                     .productId(parts[1])

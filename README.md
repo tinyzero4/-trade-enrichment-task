@@ -1,14 +1,21 @@
 # How to run the service
 
+- via command line
 ```
+$PROJECT_PATH/run.sh
+
+or
+
 mvn clean install
 mvn spring-boot:run
 ```
+
 > **_NOTE:_**  default port changed to **_server.port=9000_**
 
 # How to use the API
 
 > **_NOTE:_**  Make sure to point to correct path of trades.csv file for curl
+> 
 > **_NOTE:_**  CURL fails when reading file > 2GB
 
 ```
@@ -48,7 +55,9 @@ date,product_name,currency,price
 # Any discussion/comment on the design
 - Incoming data is read by chunks of data, profiler shows no memory degradation or huge spikes
 - Caching of productId->productName mapping done at once, since quantity of records is not so huge(need to clarify available resources). It makes lookup faster.
-- Need to tune functional style
+- Need to tune functional style and immutability
+- Favour clean architecture (adapters, application services, domain services and models)
 
 # Any ideas for improvement if there were more time available
+- API error handling
 - Need to think about modification to then workflow itself, split huge file to blocks, enrich blocks in parallel and combine at the end. However, it depends on the expected number of executions of workflows and other conditions and the nature of data.

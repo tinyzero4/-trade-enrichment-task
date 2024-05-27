@@ -45,6 +45,12 @@ public class TradeService implements EnrichmentService {
         var currency = parts[2];
         var price = parts[3];
 
+        try {
+            Long.parseLong(productId);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+
         var tradeDefinition = TradeDefinition.builder()
                 .productId(productId)
                 .date(date)
@@ -57,13 +63,14 @@ public class TradeService implements EnrichmentService {
     public Optional<TradeDefinition> enrich(TradeDefinition tradeDefinition) {
         if (tradeDefinition == null) return Optional.empty();
 
-        enrichers.forEach(enricher -> {
+        for (var enricher : enrichers) {
             try {
-                enricher.enrich(tradeDefinition);
+                tradeDefinition = enricher.enrich(tradeDefinition);
             } catch (Exception e) {
                 log.warn("[enrich] issue {}", tradeDefinition, e);
             }
-        });
+        }
+
         return Optional.of(tradeDefinition);
     }
 

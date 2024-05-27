@@ -23,7 +23,7 @@ public class TradeEnrichmentEndpoint {
     public Flux<String> enrichTrades(@RequestBody Flux<DataBuffer> trades) {
         return useCases.enrich(trades)
                 .doOnError((e) -> log.warn("[http][enrich] {}", e))
-                .onErrorResume(e -> Mono.empty());
+                .onErrorResume(e -> Flux.empty());
     }
 
 }
